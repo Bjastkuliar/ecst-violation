@@ -8,19 +8,8 @@ import pika
 import json
 import time
 import os
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
 app = Flask(__name__)
-
-trace.set_tracer_provider(TracerProvider())
-trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter())) 
-FlaskInstrumentor().instrument_app(app)
-RequestsInstrumentor().instrument()
 
 
 @app.route("/add")

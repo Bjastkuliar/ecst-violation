@@ -16,10 +16,6 @@ services:
       - "5001:5000"
     volumes:
       - ./data:/home/data
-    environment:
-      - OTEL_SERVICE_NAME=apartments
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
-
   search:
     image: cse-microservices3_search
     build: ./search
@@ -27,9 +23,6 @@ services:
       - "5002:5000"
     volumes:
       - ./data:/home/data
-    environment:
-      - OTEL_SERVICE_NAME=search
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
       
   reserve:
     image: cse-microservices3_reserve
@@ -38,9 +31,6 @@ services:
       - "5003:5000"
     volumes:
       - ./data:/home/data
-    environment:
-      - OTEL_SERVICE_NAME=reserve
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
 
   gateway:
     image: cse-microservices3_gateway
@@ -49,17 +39,6 @@ services:
       - "5050:5000"
     volumes:
       - ./data:/home/data
-
-  jaeger:
-    image: jaegertracing/all-in-one
-    ports:
-      - 4318:4318 #accept OpenTelemetry Protocol (OTLP) over HTTP
-      - 16686:16686 #serve frontend
-      - 14268:14268 #accept jaeger.thrift directly from clients
-      - 14250:14250 #accept model.proto
-    environment:
-      - COLLECTOR_OTLP_ENABLED=true
-      - LOG_LEVEL=debug
       
 #   agent:
 #     image: portainer/agent
