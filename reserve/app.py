@@ -181,20 +181,11 @@ def apartment_changed(ch, method, properties, body):
 
             logging.info(f"Adding apartment {name}...")
 
-            # correct
-            # db_connection = sqlite3.connect("/home/data/reservations.db", isolation_level=None)
-            # cursor = db_connection.cursor()
-            # cursor.execute("INSERT INTO apartments VALUES (?, ?)", (id, name))
-            # cursor.close()
-            # db_connection.close()
-
-            # lazy
             db_connection = sqlite3.connect("/home/data/reservations.db", isolation_level=None)
             cursor = db_connection.cursor()
-            cursor.execute("DELETE FROM apartments")
+            cursor.execute("INSERT INTO apartments VALUES (?, ?)", (id, name))
             cursor.close()
             db_connection.close()
-            reload_all_apartments_from_db()
 
 
         if method.routing_key == "deleted":
@@ -208,7 +199,7 @@ def apartment_changed(ch, method, properties, body):
             cursor.close()
             db_connection.close()
 
-def reload_all_apartments_from_db():
+def load_all_apartments_from_db():
     db_connection = sqlite3.connect("/home/data/reservations.db", isolation_level=None)
     cursor = db_connection.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS reservations (id text, apartment text, period_from integer, period_to integer, vip integer)")
@@ -252,7 +243,7 @@ if __name__ == "__main__":
     if os.path.exists("/home/data/reservations.db"):
         database_is_initialized = True
     else:
-        reload_all_apartments_from_db()
+        load_all_apartments_from_db()
         database_is_initialized = True
 
     if not database_is_initialized:
