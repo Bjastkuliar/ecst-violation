@@ -1,0 +1,5 @@
+.gitlab-ci.yml
+test/__pycache__
+.pytest_cache
+test/.pytest_cache
+data
